@@ -1,0 +1,39 @@
+{% extends 'base.html' %}
+
+{% block title %}Add Pet{% endblock %}
+
+{% block content %} 
+
+    <div class="container">
+        <div class="display-4 text-center">Add New Pet</div>
+            <div class="row justify-content-center">
+                <div class="col-md-6">
+                    <form method="post">
+                        {{ form.hidden_tag() }}
+                        {% for field in form
+                            if field.widget.input_type != 'hidden' %}
+                            {% if field.type != 'BooleanField' %}
+                            <div class="form-group">
+                                {{ field.label }}
+                                {{ field(class_="form-control") }}
+                                {% for error in field.errors %}
+                                <small class="form-text text-danger">
+                                    {{error}}
+                                </small>
+                                {% endfor %}
+                            </div>
+                            {% endif %}
+                        {% endfor %}
+                        <div class="row m-3 justify-content-center">
+                            <div class="col-auto">
+                                <button type="submit" class="btn btn-lg btn-primary">Add Pet!</button>
+                                <button class="btn btn-lg btn-danger"><a class="text-light text-decoration-none" href="/">Cancel</a></button>
+                            </div>
+                        </div>
+                    </form>
+                </div>
+            </div>
+    </div>
+
+
+{% endblock %}

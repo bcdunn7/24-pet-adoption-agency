@@ -1,0 +1,70 @@
+{% extends 'base.html' %}
+
+{% block title %}{{pet.name}}{% endblock %}
+
+{% block content %} 
+
+    <div class="container">
+        <div class="display-4 text-center">{{pet.name}}</div>
+            <div class="row justify-content-center">
+                <div class="col-md-6">
+                    <p>Species: {{pet.species}}</p>
+                    {% if pet.photo_url %}
+                    <img src="{{pet.photo_url}}" alt="pet photo">
+                    {% else %}
+                    <p>No Photo.</p>
+                    {% endif %}
+                    {% if pet.age %}
+                    <p>Age: {{pet.age}}</p>
+                    {% else %}
+                    <p>Unkown age.</p>
+                    {% endif %}
+                </div>
+            </div>
+            <div class="row justify-content-center">
+                <div class="col-md-6">
+                    <div class="display-5">Edit:</div>
+                    <form method="post">
+                        {{ form.hidden_tag() }}
+
+                        <!-- Here I am only displaying inputs that are (a) not hidden; (b)not un-editable, name, species, and age; and (c) not boolean. Then I am including name, species, and age but with display set to none. This is so the form data is sent and it validates. Then I am displaying boolean seperately as it is a checkbox not a text input. This allows me to use 1 form model instead of two.
+                         -->
+
+                        {% for field in form
+                            if field.widget.input_type != 'hidden'%}
+                            {% if field.type != 'BooleanField' %}
+                                {% if field.name in ('photo_url', 'notes') %}
+                                <div class="form-group">
+                                    {{ field.label }}
+                                    {{ field(class_="form-control") }}
+                                    {% for error in field.errors %}
+                                    <small class="form-text text-danger">
+                                        {{error}}
+                                    </small>
+                                    {% endfor %}
+                                </div>
+                                {% else %}
+                                <div class="d-none">
+                                    {{ field.label }}
+                                    {{ field(class_="form-control") }}
+                                </div>
+                                {% endif%}
+                            {% else %}
+                            <div class="form-group">
+                                {{field}}{{field.label(class_="m-2")}}
+                            </div>
+                            {% endif %}
+                        {% endfor %}
+                        <div class="row m-3 justify-content-center">
+                            <div class="col-auto">
+                                <button type="submit" class="btn btn-lg btn-primary">Save</button>
+                                <button class="btn btn-lg btn-danger"><a class="text-light text-decoration-none" href="/">Home</a></button>
+                            </div>
+                        </div>
+                    </form>
+                </div>
+            </div>
+    </div>
+
+
+{% endblock %}
